@@ -28,9 +28,9 @@ describe('LoginComponent', () => {
         MatIconModule,
         MatFormFieldModule,
         MatInputModule,
-        ReactiveFormsModule]
-    })
-      .compileComponents();
+        ReactiveFormsModule,
+      ],
+    }).compileComponents();
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -38,5 +38,17 @@ describe('LoginComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have a form with email and password controls', () => {
+    component.onError = true;
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const errorElement = compiled.querySelector('p.error');
+
+    expect(errorElement).toBeTruthy();
+    expect(errorElement?.textContent).toContain('An error occurred');
   });
 });
