@@ -81,4 +81,10 @@ describe('ListComponent', () => {
     const sessionCards = compileComponent.querySelectorAll('mat-card');
     expect(sessionCards.length).toBe(4);
   });
+
+  it('should display create button for admin users', () => {
+    const compileComponent = fixture.nativeElement as HTMLElement;
+    const createButton = compileComponent.querySelector('button');
+    expect(createButton).toBeTruthy();
+  });
 });

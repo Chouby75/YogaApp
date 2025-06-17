@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {  ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +12,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { expect } from '@jest/globals';
 import { SessionService } from 'src/app/services/session.service';
 import { SessionApiService } from '../../services/session-api.service';
+import { of } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { FormComponent } from './form.component';
 
@@ -21,13 +23,17 @@ describe('FormComponent', () => {
 
   const mockSessionService = {
     sessionInformation: {
-      admin: true
-    }
-  } 
+      admin: true,
+    },
+  };
+
+  const mockSessionApiService = {
+    create: jest.fn().mockReturnValue(of({})),
+    update: jest.fn().mockReturnValue(of({})),
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-
       imports: [
         RouterTestingModule,
         HttpClientModule,
@@ -35,18 +41,17 @@ describe('FormComponent', () => {
         MatIconModule,
         MatFormFieldModule,
         MatInputModule,
-        ReactiveFormsModule, 
+        ReactiveFormsModule,
         MatSnackBarModule,
         MatSelectModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
       ],
       providers: [
         { provide: SessionService, useValue: mockSessionService },
-        SessionApiService
+        { provide: SessionApiService, useValue: mockSessionApiService },
       ],
-      declarations: [FormComponent]
-    })
-      .compileComponents();
+      declarations: [FormComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FormComponent);
     component = fixture.componentInstance;
@@ -55,5 +60,29 @@ describe('FormComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should disable submit button when form is invalid', () => {
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const submitButton = compiled.querySelector('button[type="submit"]');
+
+    expect(submitButton?.hasAttribute('disabled')).toBe(true);
+  });
+
+  it('should enable submit button when form is valid', () => {
+    component.sessionForm?.setValue({
+      name: 'Test Session',
+      date: '2024-12-12',
+      teacher_id: 1,
+      description: 'Une super description',
+    });
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const submitButton = compiled.querySelector('button[type="submit"]');
+
+    expect(submitButton?.hasAttribute('disabled')).toBe(false);
   });
 });
