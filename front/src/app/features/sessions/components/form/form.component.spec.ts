@@ -13,7 +13,6 @@ import { expect } from '@jest/globals';
 import { SessionService } from 'src/app/services/session.service';
 import { SessionApiService } from '../../services/session-api.service';
 import { of } from 'rxjs';
-import { Router } from '@angular/router';
 
 import { FormComponent } from './form.component';
 
