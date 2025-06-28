@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { expect } from '@jest/globals';
 import { SessionService } from 'src/app/services/session.service';
@@ -43,7 +43,7 @@ describe('FormComponent', () => {
         ReactiveFormsModule,
         MatSnackBarModule,
         MatSelectModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: SessionService, useValue: mockSessionService },
@@ -83,5 +83,23 @@ describe('FormComponent', () => {
     const submitButton = compiled.querySelector('button[type="submit"]');
 
     expect(submitButton?.hasAttribute('disabled')).toBe(false);
+  });
+
+  it('should call create method on submit when form is valid', () => {
+    component.sessionForm?.setValue({
+      name: 'Test Session',
+      date: '2024-12-12',
+      teacher_id: 1,
+      description: 'Une super description',
+    });
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const submitButton = compiled.querySelector(
+      'button[type="submit"]'
+    ) as HTMLButtonElement;
+
+    submitButton?.click();
+    expect(mockSessionApiService.create).toHaveBeenCalled();
   });
 });

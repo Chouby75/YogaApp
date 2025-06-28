@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Yoga pour Débutants",
+    "description": "Idéal pour commencer.",
+    "date": "2025-12-12T00:00:00.000+00:00",
+    "teacher_id": 1,
+    "users": []
+  },
+  {
+    "id": 2,
+    "name": "Yoga pour Experts",
+    "description": "Pour les pros du tapis.",
+    "date": "2025-12-13T00:00:00.000+00:00",
+    "teacher_id": 2,
+    "users": []
+  }
+]

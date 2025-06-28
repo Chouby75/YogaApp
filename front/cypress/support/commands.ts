@@ -1,43 +1,73 @@
-// ***********************************************
-// This example namespace declaration will help
-// with Intellisense and code completion in your
-// IDE or Text Editor.
-// ***********************************************
-// declare namespace Cypress {
-//   interface Chainable<Subject = any> {
-//     customCommand(param: any): typeof customCommand;
-//   }
-// }
-//
-// function customCommand(param: any): void {
-//   console.warn(param);
-// }
-//
-// NOTE: You can use it like so:
-// Cypress.Commands.add('customCommand', customCommand);
-//
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+// Fichier : cypress/support/commands.ts (La nouvelle version)
+
+Cypress.Commands.add('loginAsAdmin', () => {
+  cy.intercept('POST', '/api/auth/login', {
+    body: {
+      id: 1,
+      username: 'userName',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      admin: true,
+    },
+  });
+
+  // On remplace "fixture" par "body" et on met les données ici
+  cy.intercept('GET', '/api/session', {
+    body: [
+      {
+        id: 1,
+        name: 'Yoga pour Débutants',
+        description: 'Idéal pour commencer.',
+        date: new Date().toISOString(), // .toISOString() pour un format standard
+        teacher_id: 1,
+        users: [],
+      },
+      {
+        id: 2,
+        name: 'Yoga pour Experts',
+        description: 'Pour les pros du tapis.',
+        date: new Date().toISOString(),
+        teacher_id: 2,
+        users: [],
+      },
+    ],
+  }).as('session');
+
+  cy.visit('/login');
+
+  cy.get('input[formControlName=email]').type('yoga@studio.com');
+  cy.get('input[formControlName=password]').type(
+    `${'test!1234'}{enter}{enter}`
+  );
+
+  cy.url().should('include', '/sessions');
+});
+
+Cypress.Commands.add('createSession', (session) => {
+  // Cette commande ne fait qu'une chose : remplir le formulaire.
+  cy.get('input[formControlName=name]').type(session.name);
+  cy.get('input[formControlName=date]').type(session.date);
+
+  cy.get('mat-select[formControlName=teacher_id]').click();
+
+  // On attend que les options soient bien apparues
+  cy.get('mat-option').should('be.visible');
+
+  cy.get('mat-option').contains(session.teacherName).click();
+
+  cy.get('textarea[formControlName=description]').type(session.description);
+
+  cy.get('button[type=submit]').click();
+});
+
+Cypress.Commands.add('logout', () => {
+  cy.contains('span', 'Logout').click();
+});
+
+Cypress.Commands.add('participate', () => {
+  cy.contains('button', 'Participate').click();
+});
+
+Cypress.Commands.add('unParticipate', () => {
+  cy.contains('button', 'Do not participate').click();
+});
