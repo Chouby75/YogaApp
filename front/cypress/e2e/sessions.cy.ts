@@ -1,6 +1,9 @@
 // cypress/e2e/sessions_flow.cy.ts
 
 describe('Campaign: Session Management Flow', () => {
+  it('should go to login page on register button click', () => {
+    cy.registerAsUser();
+  });
   // ===================================================================
   // MISSION 1: Se connecter et afficher la liste des sessions
   // ===================================================================
@@ -15,6 +18,11 @@ describe('Campaign: Session Management Flow', () => {
 
     cy.get('.item').should('have.length', 2); // On vérifie qu'on a 2 sessions
     cy.get('.item').first().should('contain', 'Yoga pour Débutants');
+  });
+
+  it('should log error when trying to log in with invalid credentials', () => {
+    // PRÉPARATION : On intercepte l'appel de connexion avec des données incorrectes
+    cy.loginError();
   });
 
   // ===================================================================
@@ -45,6 +53,12 @@ describe('Campaign: Session Management Flow', () => {
     cy.wait('@getSessionDetail'); // On attend que les détails de la session soient chargés
     // On vérifie que le titre de la session est bien affiché.
     cy.get('h1').debug();
+  });
+
+  it('display user details in account page', () => {
+    cy.loginAsAdmin();
+    cy.wait('@session');
+    cy.accountDetails();
   });
 
   // ===================================================================
