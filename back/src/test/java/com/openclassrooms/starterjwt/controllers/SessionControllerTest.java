@@ -5,10 +5,7 @@ import com.openclassrooms.starterjwt.dto.SessionDto;
 import com.openclassrooms.starterjwt.mapper.SessionMapper;
 import com.openclassrooms.starterjwt.models.Session;
 import com.openclassrooms.starterjwt.models.Teacher;
-import com.openclassrooms.starterjwt.payload.request.LoginRequest;
-import com.openclassrooms.starterjwt.payload.request.SignupRequest;
 import com.openclassrooms.starterjwt.repository.UserRepository;
-import com.openclassrooms.starterjwt.security.services.UserDetailsImpl;
 import com.openclassrooms.starterjwt.security.services.UserDetailsServiceImpl;
 import com.openclassrooms.starterjwt.services.SessionService;
 
