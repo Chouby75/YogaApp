@@ -165,6 +165,11 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
+						<configuration>
+							<excludes>
+								<exclude>com/openclassrooms/starterjwt/dto/*</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 
 					<execution>

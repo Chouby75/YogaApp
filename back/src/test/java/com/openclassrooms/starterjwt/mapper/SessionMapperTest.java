@@ -308,4 +308,6 @@ public class SessionMapperTest {
         assertThat(entityFromDto.getCreatedAt()).isEqualTo(session.getCreatedAt());
         assertThat(entityFromDto.getUpdatedAt()).isEqualTo(session.getUpdatedAt());
     }
+
+    
 }
